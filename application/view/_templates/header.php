@@ -49,7 +49,7 @@
                 <a href="<?php echo Config::get('URL'); ?>user/index">My Account</a>
                 <ul class="navigation-submenu">
                     <li <?php if (View::checkForActiveController($filename, "user")) { echo ' class="active" '; } ?> >
-                        <a href="<?php echo Config::get('URL'); ?>user/changeUserRole">Change account type</a>
+                        <a href="<?php echo Config::get('URL'); ?>user/changeUserRole">Register As A Buissness</a>
                     </li>
                     <li <?php if (View::checkForActiveController($filename, "user")) { echo ' class="active" '; } ?> >
                         <a href="<?php echo Config::get('URL'); ?>user/editAvatar">Edit your avatar</a>
