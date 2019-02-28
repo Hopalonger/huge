@@ -20,7 +20,42 @@ class DashboardController extends Controller
      * This method controls what happens when you move to /dashboard/index in your app.
      */
     public function index()
-    {
-        $this->View->render('dashboard/index');
+    {	
+        $this->View->render('dashboard/index', array(
+                'jobs' => UserModel::getBalance(Session::get('user_id')),
+				'users' => UserModel::getJobsUsers(Session::get('user_id')),
+				'totaljobs' => UserModel::getTotalJobsOfUser(Session::get('user_id')))
+        );
     }
+	public function reload()
+	{
+		$this->View->render('dashboard/reload', array(
+                'jobs' => UserModel::getBalance(Session::get('user_id')),
+				'users' => UserModel::getJobsUsers(Session::get('user_id')),
+				'totaljobs' => UserModel::getTotalJobsOfUser(Session::get('user_id')))
+		);
+	}	
+	public function pay()
+	{
+		$this->View->render('dashboard/pay', array(
+                'jobs' => UserModel::getBalance(Session::get('user_id')),
+				'users' => UserModel::getJobsUsers(Session::get('user_id')),
+				'totaljobs' => UserModel::getTotalJobsOfUser(Session::get('user_id')),
+				'value' => Request::post('pay'))
+		);
+	}
+	public function payment()
+	{
+				$this->View->render('dashboard/payment', array(
+                'jobs' => UserModel::getBalance(Session::get('user_id')),
+				'users' => UserModel::getJobsUsers(Session::get('user_id')),
+				'totaljobs' => UserModel::getTotalJobsOfUser(Session::get('user_id')),
+				'message' => UserModel::addBalance(Session::get('user_id'),Request::post('pay')),
+				'value' => Request::post('pay'),
+				'token' => Request::post('token'))
+		);
+	}
+	
+
 }
+
