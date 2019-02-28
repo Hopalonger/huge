@@ -7,10 +7,10 @@
         <?php $this->renderFeedbackMessages(); ?>
 
         <h3>What happens here ?</h3>
-
+		
         <div>
-            This controller/action/view shows a list of all users in the system. with the ability to soft delete a user
-            or suspend a user.
+            Here is the users profile you also have the abiltiy to ban people if you want
+			<a href="http://localhost/admin/private"> Here is a bit more private data </a>
         </div>
         <div>
             <table class="overview-table">
@@ -27,7 +27,7 @@
                     <td>Submit</td>
                 </tr>
                 </thead>
-                <?php foreach ($this->users as $user) { ?>
+                <?php  foreach ($this->users as $user) { ?>
                     <tr class="<?= ($user->user_active == 0 ? 'inactive' : 'active'); ?>">
                         <td><?= $user->user_id; ?></td>
                         <td class="avatar">
