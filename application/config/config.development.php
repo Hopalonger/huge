@@ -65,7 +65,7 @@ return array(
     'DB_HOST' => '127.0.0.1',
     'DB_NAME' => 'huge',
     'DB_USER' => 'root',
-    'DB_PASS' => '12345678',
+    'DB_PASS' => '',
     'DB_PORT' => '3306',
     'DB_CHARSET' => 'utf8',
     /**
@@ -133,24 +133,24 @@ return array(
      * EMAIL_SMTP_AUTH: leave this true unless your SMTP service does not need authentication
      */
     'EMAIL_USED_MAILER' => 'phpmailer',
-    'EMAIL_USE_SMTP' => false,
-    'EMAIL_SMTP_HOST' => 'yourhost',
+    'EMAIL_USE_SMTP' => true,
+    'EMAIL_SMTP_HOST' => 'smtp.gmail.com',
     'EMAIL_SMTP_AUTH' => true,
-    'EMAIL_SMTP_USERNAME' => 'yourusername',
-    'EMAIL_SMTP_PASSWORD' => 'yourpassword',
-    'EMAIL_SMTP_PORT' => 465,
+    'EMAIL_SMTP_USERNAME' => 'spotify.badmusic@gmail.com',
+    'EMAIL_SMTP_PASSWORD' => '',
+    'EMAIL_SMTP_PORT' =>  465,
     'EMAIL_SMTP_ENCRYPTION' => 'ssl',
     /**
      * Configuration for: Email content data
      */
     'EMAIL_PASSWORD_RESET_URL' => 'login/verifypasswordreset',
-    'EMAIL_PASSWORD_RESET_FROM_EMAIL' => 'no-reply@example.com',
-    'EMAIL_PASSWORD_RESET_FROM_NAME' => 'My Project',
-    'EMAIL_PASSWORD_RESET_SUBJECT' => 'Password reset for PROJECT XY',
+    'EMAIL_PASSWORD_RESET_FROM_EMAIL' => 'spotify.badmusic@gmail.com',
+    'EMAIL_PASSWORD_RESET_FROM_NAME' => 'Make That',
+    'EMAIL_PASSWORD_RESET_SUBJECT' => 'Password reset for Make That',
     'EMAIL_PASSWORD_RESET_CONTENT' => 'Please click on this link to reset your password: ',
     'EMAIL_VERIFICATION_URL' => 'register/verify',
-    'EMAIL_VERIFICATION_FROM_EMAIL' => 'no-reply@example.com',
-    'EMAIL_VERIFICATION_FROM_NAME' => 'My Project',
-    'EMAIL_VERIFICATION_SUBJECT' => 'Account activation for PROJECT XY',
+    'EMAIL_VERIFICATION_FROM_EMAIL' => 'spotify.badmusic@gmail.com',
+    'EMAIL_VERIFICATION_FROM_NAME' => 'Make That',
+    'EMAIL_VERIFICATION_SUBJECT' => 'Account activation for Make That',
     'EMAIL_VERIFICATION_CONTENT' => 'Please click on this link to activate your account: ',
 );
