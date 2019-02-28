@@ -41,9 +41,147 @@ class UserModel
             $all_users_profiles[$user->user_id]->user_avatar_link = (Config::get('USE_GRAVATAR') ? AvatarModel::getGravatarLinkByEmail($user->user_email) : AvatarModel::getPublicAvatarFilePathOfUser($user->user_has_avatar, $user->user_id));
         }
 
+
         return $all_users_profiles;
     }
+	    public static function getUserExtensionOfAllUsers()
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
 
+        $sql = $sql = "SELECT * FROM userextension";
+        $query = $database->prepare($sql);
+        $query->execute();
+	
+        $all_users_stuff = array();
+	 	$counter = 0;
+        foreach ($query->fetchAll() as $user) {
+
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+             array_walk_recursive($user, 'Filter::XSSFilter');
+			
+            $all_users_stuff[$user->userid] = new stdClass();
+			$all_users_stuff[$user->userid]->all = $user;
+            $all_users_stuff[$user->userid]->user_id = $user->userid;
+            $all_users_stuff[$user->userid]->address1 = $user->address1;
+            $all_users_stuff[$user->userid]->address2 = $user->address2;
+            $all_users_stuff[$user->userid]->state = $user->state;
+            $all_users_stuff[$user->userid]->city = $user->city;
+			$all_users_stuff[$user->userid]->zipcode = $user->zipcode;
+			$all_users_stuff[$user->userid]->fullname = $user->fullname;
+			$all_users_stuff[$user->userid]->stripeid = $user->stripeid;
+			$all_users_stuff[$user->userid]->balance = $user->balance;
+			$all_users_stuff[$user->userid]->totalpay = $user->totalpay;
+			$all_users_stuff[$user->userid]->totaljobs = $user->totaljobs;
+			$prints = "3dprints";
+			$all_users_stuff[$user->userid]->$prints = $user->$prints;
+			$all_users_stuff[$user->userid]->weld = $user->weld;
+			$all_users_stuff[$user->userid]->cnc = $user->cnc;
+			$all_users_stuff[$user->userid]->solder = $user->solder;
+			$all_users_stuff[$user->userid]->phone = $user->phone;
+			$all_users_stuff[$user->userid]->num = "100";
+			
+        }
+			
+        return $all_users_stuff;
+    }
+	
+	public static function getTotalJobsOfUser($user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = $sql = "SELECT * FROM userextension WHERE userid = :user_id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id));
+	
+        $all_users_stuff = "";
+	 	
+        foreach ($query->fetchAll() as $user) {
+
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+             array_walk_recursive($user, 'Filter::XSSFilter');
+			$all_users_stuff = $user->totaljobs;
+        }
+
+        return $all_users_stuff;
+    }
+	
+
+	
+	    public static function getJobsUsers($user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = $sql = "SELECT * FROM jobs WHERE doid = :user_id AND active = 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id));
+	
+        $all_users_stuff = array();
+	 	
+        foreach ($query->fetchAll() as $user) {
+
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+             array_walk_recursive($user, 'Filter::XSSFilter');
+			
+            $all_users_stuff[$user->job_id] = new stdClass();
+			$prints = "3dprints";
+			$all_users_stuff[$user->job_id]->job_id = $user->job_id;
+			$all_users_stuff[$user->job_id]->creatorid = $user->createid;
+			$all_users_stuff[$user->job_id]->$prints = $user->$prints;
+			$all_users_stuff[$user->job_id]->weld = $user->weld;
+			$all_users_stuff[$user->job_id]->cnc = $user->cnc;
+			$all_users_stuff[$user->job_id]->solder = $user->solder;
+			$all_users_stuff[$user->job_id]->decript = $user->description;
+			$all_users_stuff[$user->job_id]->files = $user->files;
+			$all_users_stuff[$user->job_id]->pay = $user->pay;
+			$all_users_stuff[$user->job_id]->reviewed = $user->reviewed;
+			$all_users_stuff[$user->job_id]->material = $user->material;
+			
+        }
+	
+        return $all_users_stuff;
+    }	
+	
+		    public static function getAllJobs()
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = $sql = "SELECT * FROM jobs WHERE active = 1";
+        $query = $database->prepare($sql);
+        $query->execute();
+	
+        $all_users_stuff = array();
+	 	
+        foreach ($query->fetchAll() as $user) {
+
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+             array_walk_recursive($user, 'Filter::XSSFilter');
+			
+            $all_users_stuff[$user->job_id] = new stdClass();
+			$prints = "3dprints";
+			$all_users_stuff[$user->job_id]->job_id = $user->job_id;
+			$all_users_stuff[$user->job_id]->creatorid = $user->createid;
+			$all_users_stuff[$user->job_id]->$prints = $user->$prints;
+			$all_users_stuff[$user->job_id]->weld = $user->weld;
+			$all_users_stuff[$user->job_id]->cnc = $user->cnc;
+			$all_users_stuff[$user->job_id]->solder = $user->solder;
+			$all_users_stuff[$user->job_id]->decript = $user->description;
+			$all_users_stuff[$user->job_id]->files = $user->files;
+			$all_users_stuff[$user->job_id]->pay = $user->pay;
+			$all_users_stuff[$user->job_id]->reviewed = $user->reviewed;
+			$all_users_stuff[$user->job_id]->material = $user->material;
+			
+        }
+	
+        return $all_users_stuff;
+    }
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id
@@ -59,7 +197,7 @@ class UserModel
         $query->execute(array(':user_id' => $user_id));
 
         $user = $query->fetch();
-
+	
         if ($query->rowCount() == 1) {
             if (Config::get('USE_GRAVATAR')) {
                 $user->user_avatar_link = AvatarModel::getGravatarLinkByEmail($user->user_email);
@@ -74,10 +212,40 @@ class UserModel
         // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
         // the user's values
         array_walk_recursive($user, 'Filter::XSSFilter');
-
+		
         return $user;
     }
+	    public static function getUserReviews($user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
 
+        $sql = "SELECT * FROM reviews WHERE userid = :user_id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id));
+
+        $all_users_profiles = array();
+
+        foreach ($query->fetchAll() as $user) {
+
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+            array_walk_recursive($user, 'Filter::XSSFilter');
+
+            $all_users_profiles[$user->title] = new stdClass();
+            $all_users_profiles[$user->title]->title = $user->title;
+            $all_users_profiles[$user->title]->body = $user->body;
+            $all_users_profiles[$user->title]->stars = $user->stars;
+            $all_users_profiles[$user->title]->process = $user->process;
+            $all_users_profiles[$user->title]->timely = $user->timelyness;
+			$all_users_profiles[$user->title]->quality = $user->quality;
+			$all_users_profiles[$user->title]->communication = $user->communication;
+       }
+
+
+        return $all_users_profiles;
+    }
+	
     /**
      * @param $user_name_or_email
      *
@@ -132,7 +300,7 @@ class UserModel
         }
         return true;
     }
-
+	
     /**
      * Writes new username to database
      *
@@ -315,6 +483,120 @@ class UserModel
         return $query->fetch();
     }
 
+	    public static function getBalance($user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT balance FROM userextension WHERE (userid = :user_id )";
+        $query = $database->prepare($sql);
+
+        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
+        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+        $query->execute(array(':user_id' => $user_id)); 
+		$balance = "";
+		        foreach ($query->fetchAll() as $user) {
+			
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+            array_walk_recursive($user, 'Filter::XSSFilter');
+
+            
+            $balance = $user->balance;
+           }
+        // return one row (we only have one result or nothing)
+        return $balance;
+    }
+	
+	 public static function addBalance($user_id,$value)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT balance FROM userextension WHERE (userid = :user_id )";
+        $query = $database->prepare($sql);
+
+        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
+        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+        $query->execute(array(':user_id' => $user_id)); 
+		$balance = "";
+		        foreach ($query->fetchAll() as $user) {
+			
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+            array_walk_recursive($user, 'Filter::XSSFilter');
+
+            
+            $balance = $user->balance;
+           }
+		   $value = (int)$value / 100;
+		   $sql = "UPDATE userextension SET balance = :balance WHERE (userid = :user_id )";
+        $query = $database->prepare($sql);
+		$query->execute(array(':user_id' => $user_id,
+							  ':balance' => (int)$balance + (int)$value)); 
+		if($query){
+			return true;
+		}
+        // return one row (we only have one result or nothing)
+        return false;
+    }
+		 public static function chargeUser($user_id,$value)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT balance FROM userextension WHERE (userid = :user_id )";
+        $query = $database->prepare($sql);
+
+        // DEFAULT is the marker for "normal" accounts (that have a password etc.)
+        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+        $query->execute(array(':user_id' => $user_id)); 
+		$balance = "";
+		        foreach ($query->fetchAll() as $user) {
+			
+            // all elements of array passed to Filter::XSSFilter for XSS sanitation, have a look into
+            // application/core/Filter.php for more info on how to use. Removes (possibly bad) JavaScript etc from
+            // the user's values
+            array_walk_recursive($user, 'Filter::XSSFilter');
+
+            
+            $balance = $user->balance;
+           }
+		   if((int)$value < (int)$balance){
+		   $value = (int)$value / 100;
+		   $sql = "UPDATE userextension SET balance = :balance WHERE (userid = :user_id )";
+        $query = $database->prepare($sql);
+		$query->execute(array(':user_id' => $user_id,
+							  ':balance' => (int)$balance - (int)$value)); 
+		if($query){
+			return true;
+		   }}else{
+			   return "There was not enough money in the account please add <a href = '<?php echo Config::get('URL'); ?>dashboard/reload'>Money Here</a>";
+		   }
+        // return one row (we only have one result or nothing)
+        return false;
+    }
+		
+		    public static function setBalance($balance,$user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "UPDATE userextension SET balance = :balance WHERE (userid = :user_id )";
+        $query = $database->prepare($sql);
+
+        // pretty Self Explanitory
+        // There are other types of accounts that don't have passwords etc. (FACEBOOK)
+        $query->execute(array(':user_id' => $user_id, ':balance' => $balance)); 
+		        
+		
+        // Check if successful
+		    $count = $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }
+        return false;
+        
+    }
+	
     /**
      * Gets the user's data by user's id and a token (used by login-via-cookie process)
      *
