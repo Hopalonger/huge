@@ -108,7 +108,13 @@ class UserController extends Controller
      */
     public function changeUserRole()
     {
-        $this->View->render('user/changeUserRole');
+        $this->View->render('user/changeUserRole', array(
+		    'jobs' => UserModel::getBalance(Session::get('user_id')),
+			'users' => UserModel::getJobsUsers(Session::get('user_id')),
+			'totaljobs' => UserModel::getTotalJobsOfUser(Session::get('user_id')))
+		
+		
+		);
     }
 
     /**
@@ -118,8 +124,12 @@ class UserController extends Controller
     public function changeUserRole_action()
     {
         if (Request::post('user_account_upgrade')) {
+			if(UserModel::chargeUser(Session::get('user_id'),5000) == true){
             // "2" is quick & dirty account type 2, something like "premium user" maybe. you got the idea :)
             UserRoleModel::changeUserRole(2);
+			}else{
+				Redirect::to('user/failedupgrade');
+			}
         }
 
         if (Request::post('user_account_downgrade')) {
@@ -129,6 +139,13 @@ class UserController extends Controller
 
         Redirect::to('user/changeUserRole');
     }
+	public function failedupgrade()
+	{
+		$this->View->render('user/changePassword');
+		
+		
+		
+	}
 
     /**
      * Password Change Page
