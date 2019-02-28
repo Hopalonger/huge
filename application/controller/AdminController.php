@@ -18,12 +18,20 @@ class AdminController extends Controller
      * This method controls what happens when you move to /admin or /admin/index in your app.
      */
     public function index()
-    {
+    {	
         $this->View->render('admin/index', array(
-                'users' => UserModel::getPublicProfilesOfAllUsers())
+                'users' => UserModel::getPublicProfilesOfAllUsers(),
+				'extension' => UserModel::getUserExtensionOfAllUsers())
         );
     }
-
+	public function private()
+	{
+		$this->View->render('admin/private', array(
+                'users' => UserModel::getUserExtensionOfAllUsers())
+        );
+		
+	}	
+		
     public function actionAccountSettings()
     {
         AdminModel::setAccountSuspensionAndDeletionStatus(
