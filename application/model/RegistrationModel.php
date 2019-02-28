@@ -91,6 +91,7 @@ class RegistrationModel
      *
      * @return bool
      */
+
     public static function registrationInputValidation($captcha, $user_name, $user_password_new, $user_password_repeat, $user_email, $user_email_repeat)
     {
         $return = true;
@@ -215,6 +216,23 @@ class RegistrationModel
                               ':user_activation_hash' => $user_activation_hash,
                               ':user_provider_type' => 'DEFAULT'));
         $count =  $query->rowCount();
+		
+		
+        $sql = "SELECT * FROM users WHERE user_name = :user_name";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_name' => $user_name));
+		
+        $all_users_profiles = array();
+
+        foreach ($query->fetchAll() as $user) {
+		$userid = $user->user_id;
+		}
+
+        $sql = "INSERT INTO userextension (userid)
+                    VALUES (:userid)";
+        $query = $database->prepare($sql);
+        $query->execute(array(':userid' => $userid));
+        	
         if ($count == 1) {
             return true;
         }
